@@ -25,15 +25,30 @@
                 </form>
                <ol class="list-group list-group-numbered">
                     {% for todo in todos  %}
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                                <div class="fw-bold">{{todo.body}}</div>
-                                 <p>{{todo.datetime}}</p>
-                            </div>
-                        <span class="badge text-bg-primary rounded-pill">14</span>
-                        </li>
+                        {% if todo.done %}
+                            <li class="tex-muted list-group-item list-group-item-dark d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold"><del>{{todo.body}}</del></div>
+                                    <p>{{todo.datetime}}</p>
+                                </div>
+                                <form action="{% url 'action' todo.id 'delete' %}" method="post">{% csrf_token %}<button class=" btn badge bg-danger rounded-pill m-1">O'chirish</button></form>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{todo.body}}</div>
+                                    <p>{{todo.datetime}}</p>
+                                </div>
+                                <form action="{% url 'action' todo.id 'done' %}" method="post">{% csrf_token %}<button class=" btn badge bg-success rounded-pill m-1">Bajarildi</button></form>
+                                <form action="{% url 'action' todo.id 'delete' %}" method="post">{% csrf_token %}<button class=" btn badge bg-danger rounded-pill m-1">O'chirish</button></form>
+                            </li>
+                        {% endif %}
                     {% endfor %}
                 </ol>
+                <form method="post action="{% url 'logout' %}">
+                    {% csrf_token %}
+                <a href="{% url "logout" %}" class="btn btn-warning mt-3">Tizimdan chiqish</a>
+                </form>
             </div>
         </div>
     </div>
